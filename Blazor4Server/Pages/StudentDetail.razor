@@ -1,0 +1,43 @@
+﻿@page "/studentdetail/{StudentId}"
+
+@using System.Runtime.InteropServices
+@using Blazor4Server.Data
+@using Blazor4Server.Models
+@using Blazor4Server.Services
+@inject StudentService Service
+
+<h3>StudentDetail</h3>
+<div class="form-group">
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            <label>@student.Firstname</label>
+        </dt>
+        <dt>
+            <label>@student.Lastname</label>
+        </dt>
+        <dt>
+            <label>@student.School</label>
+        </dt>
+    </dl>
+</div>
+
+
+
+@code {
+    Models.Student student;
+
+    [Parameter]
+    public string StudentId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await load();
+    }
+
+    protected async Task load()
+    {
+        student = await Service.GetStudentByIdAsync(StudentId);
+    }
+
+}

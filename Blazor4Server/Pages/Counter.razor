@@ -1,0 +1,16 @@
+﻿@page "/counter"
+
+<h1>Compteur</h1>
+
+<p>Compteur courant: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Ajouter de 10 !</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount = currentCount+10;
+    }
+}

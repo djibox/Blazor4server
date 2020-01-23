@@ -1,0 +1,194 @@
+﻿@page "/student"
+@using Blazor4Server.Data
+@using Blazor4Server.Services
+@using Blazor4Server.Models
+
+@inject StudentService Service
+
+<h1>
+    Students
+</h1>
+<button class="btn btn-info" @onclick="Creation">Create</button>
+
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>School</th>
+        <th>Commands</th>
+    </tr>
+    @foreach (var item in _students)
+    {
+        <tr>
+            <td>@item.Firstname</td>
+            <td>@item.Lastname</td>
+            <td>@item.School</td>
+            <td>
+                @*<a href="@($"studentdetail/{item.StudentId}")" class="btn btn-primary">
+                        Detail
+                    </a>*@
+                <button class="btn btn-info" @onclick="@(()=>Details(item.StudentId))">Details</button>
+                <button class="btn btn-primary" @onclick="@(()=>Edition(item.StudentId))">Edit</button>
+                <button class="btn btn-danger" @onclick="@(()=>Deletion(item.StudentId))">Delete</button>
+            </td>
+        </tr>
+    }
+</table>
+@if (Create)
+{
+    <div>
+        <div class="col-md-12 form-group">
+            <input type="text" @bind="@_student.Firstname" placeholder="Firstname" />
+        </div>
+        <div class="col-md-12 form-group">
+            <input type="text" @bind="@_student.Lastname" placeholder="Lastname" />
+        </div>
+        <div class="col-md-12 form-group">
+            <input type="text" @bind="@_student.School" placeholder="School" @onfocusout="Assi" />
+        </div>
+        <div class="col-md-12 form-group">
+            <button class="btn btn-primary" @onclick="Add">Enregistrer</button>
+        </div>
+        <label>@_student.StudentId - @_student.Firstname - @_student.Lastname - @_student.School</label>
+    </div>
+}
+@if (Edit)
+{
+    <div>
+        <div hidden="true" class="col-md-12 form-group">
+            <input type="text" @bind="@studentid" />
+        </div>
+        <div class="col-md-12 form-group">
+            <input type="text" @bind="@firstname" />
+        </div>
+        <div class="col-md-12 form-group">
+            <input type="text" @bind="@lastname" />
+        </div>
+        <div class="col-md-12 form-group">
+            <input type="text" @bind="@school" />
+        </div>
+        <div class="col-md-12 form-group">
+            <button class="btn btn-primary" @onclick="Actualiser">Actualiser</button>
+        </div>
+        <label>@studentid - @firstname - @lastname - @school</label>
+    </div>
+}
+@if (Detail)
+{
+    <div>
+        <div hidden="true" class="col-md-12 form-group">
+            <label> @studentid"</label>
+        </div>
+        <div class="col-md-12 form-group">
+            <label> @firstname"</label>
+        </div>
+        <div class="col-md-12 form-group">
+            <label> @lastname"</label>
+        </div>
+        <div class="col-md-12 form-group">
+            <label> @school"</label>
+        </div>
+    </div>
+}
+@code
+{
+    public List<Models.Student> _students;
+
+    [Parameter]
+    public string studentid { get; set; }
+
+    string firstname;
+    string lastname;
+    string school;
+
+    [Parameter]
+    public Models.Student _student { get; set; } = new Models.Student();
+
+    bool Create = false;
+    bool Detail = false;
+    bool Edit = false;
+    bool Delete = false;
+
+    public async Task Details(string id)
+    {
+        Detail = true;
+        Create = false;
+        Edit = false;
+        Delete = false;
+        studentid = id;
+        var stud = await Service.GetStudentByIdAsync(id);
+        firstname = stud.Firstname;
+        lastname = stud.Lastname;
+        school = stud.School;
+    }
+
+    public async Task Deletion(string id)
+    {
+        Delete = true;
+        Detail = false;
+        Create = false;
+        Edit = false;
+        studentid = id;
+        var stud = await Service.DeleteAsync(id);
+        Load();
+    }
+
+
+    public void Creation()
+    {
+        Create = true;
+        Edit = false;
+        Detail = false;
+        Delete = false;
+    }
+    public async Task Edition(string id)
+    {
+        Create = false;
+        Edit = true;
+        Detail = false;
+        studentid = id;
+        Delete = false;
+
+        var stud = Service.GetStudentByIdAsync(id);
+        firstname = stud.Result.Firstname;
+        lastname = stud.Result.Lastname;
+        school = stud.Result.School;
+    }
+    public async Task Add()
+    {
+        await Service.InsertStudentAsync(_student);
+        Create = false;
+        Load();
+    }
+
+    public async Task Assi()
+    {
+
+        _student.StudentId = Guid.NewGuid().ToString();
+    }
+
+    public async Task Actualiser()
+    {
+        Models.Student student = new Models.Student
+        {
+            StudentId = studentid,
+            Firstname = firstname,
+            Lastname = lastname,
+            School = school
+        };
+        await Service.UpdateStudentAsync(studentid, student);
+        Load();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    public async Task Load()
+    {
+        _students = await Service.GetAllStudentsAsync();
+
+    }
+}
+
