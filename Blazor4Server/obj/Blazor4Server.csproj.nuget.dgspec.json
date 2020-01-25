@@ -1,26 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\leger\\source\\repos\\Blazor4Server\\Blazor4Server\\Blazor4Server.csproj": {}
+    "C:\\mastering\\blazor\\Blazor4server\\Blazor4Server\\Blazor4Server.csproj": {}
   },
   "projects": {
-    "C:\\Users\\leger\\source\\repos\\Blazor4Server\\Blazor4Server\\Blazor4Server.csproj": {
+    "C:\\mastering\\blazor\\Blazor4server\\Blazor4Server\\Blazor4Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\leger\\source\\repos\\Blazor4Server\\Blazor4Server\\Blazor4Server.csproj",
+        "projectUniqueName": "C:\\mastering\\blazor\\Blazor4server\\Blazor4Server\\Blazor4Server.csproj",
         "projectName": "Blazor4Server",
-        "projectPath": "C:\\Users\\leger\\source\\repos\\Blazor4Server\\Blazor4Server\\Blazor4Server.csproj",
-        "packagesPath": "C:\\Users\\leger\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\leger\\source\\repos\\Blazor4Server\\Blazor4Server\\obj\\",
+        "projectPath": "C:\\mastering\\blazor\\Blazor4server\\Blazor4Server\\Blazor4Server.csproj",
+        "packagesPath": "C:\\Users\\LegerDjiba\\.nuget\\packages\\",
+        "outputPath": "C:\\mastering\\blazor\\Blazor4server\\Blazor4Server\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Microsoft\\Xamarin\\NuGet\\"
         ],
         "configFilePaths": [
-          "C:\\Users\\leger\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LegerDjiba\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\ServiceFabricSDK.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -28,7 +26,6 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\Microsoft SDKs\\Service Fabric\\packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -88,7 +85,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.200-preview-014883\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

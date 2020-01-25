@@ -39,11 +39,15 @@ namespace Blazor4Server.Services
         public async Task<Student> UpdateStudentAsync(string id, Student student)
         {
             var s = await DbContext.Students.FindAsync(id);
-            s.Firstname = student.Firstname;
-            s.Lastname = student.Lastname;
-            s.School = student.School;
-            DbContext.Students.Update(s);
-            await DbContext.SaveChangesAsync();
+            if(s!=null)
+            {
+                s.Firstname = student.Firstname;
+                s.Lastname = student.Lastname;
+                s.School = student.School;
+                DbContext.Students.Update(s);
+                await DbContext.SaveChangesAsync();
+            }
+
             return s;
         }
         public async Task<Student> DeleteAsync(string id)

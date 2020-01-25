@@ -1,39 +1,36 @@
 ﻿@page "/student"
-@using Blazor4Server.Data
 @using Blazor4Server.Services
-@using Blazor4Server.Models
 
 @inject StudentService Service
 
 <h1>
     Students
 </h1>
-<button class="btn btn-info" @onclick="Creation">Create</button>
-
-<table class="table table-bordered table-hover">
-    <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>School</th>
-        <th>Commands</th>
-    </tr>
-    @foreach (var item in _students)
-    {
+<button class="btn btn-info" @onclick="Creation">New Student</button>
+<div>
+    <table class="table table-bordered table-hover">
         <tr>
-            <td>@item.Firstname</td>
-            <td>@item.Lastname</td>
-            <td>@item.School</td>
-            <td>
-                @*<a href="@($"studentdetail/{item.StudentId}")" class="btn btn-primary">
-                        Detail
-                    </a>*@
-                <button class="btn btn-info" @onclick="@(()=>Details(item.StudentId))">Details</button>
-                <button class="btn btn-primary" @onclick="@(()=>Edition(item.StudentId))">Edit</button>
-                <button class="btn btn-danger" @onclick="@(()=>Deletion(item.StudentId))">Delete</button>
-            </td>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>School</th>
+            <th>Commands</th>
         </tr>
-    }
-</table>
+        @foreach (var item in _students)
+        {
+            <tr>
+                <td>@item.Firstname</td>
+                <td>@item.Lastname</td>
+                <td>@item.School</td>
+                <td>
+                    <button class="btn btn-info" @onclick="@(()=>Details(item.StudentId))">Details</button>
+                    <button class="btn btn-primary" @onclick="@(()=>Edition(item.StudentId))">Edit</button>
+                    <button class="btn btn-danger" @onclick="@(()=>Deletion(item.StudentId))">Delete</button>
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
 @if (Create)
 {
     <div>
@@ -55,7 +52,7 @@
 @if (Edit)
 {
     <div>
-        <div hidden="true" class="col-md-12 form-group">
+        <div hidden class="col-md-12 form-group">
             <input type="text" @bind="@studentid" />
         </div>
         <div class="col-md-12 form-group">
@@ -76,20 +73,44 @@
 @if (Detail)
 {
     <div>
-        <div hidden="true" class="col-md-12 form-group">
-            <label> @studentid"</label>
+        <div hidden class="col-md-12 form-group">
+            <label> @studentid</label>
         </div>
         <div class="col-md-12 form-group">
-            <label> @firstname"</label>
+            <label> @firstname</label>
         </div>
         <div class="col-md-12 form-group">
-            <label> @lastname"</label>
+            <label> @lastname</label>
         </div>
         <div class="col-md-12 form-group">
-            <label> @school"</label>
+            <label> @school</label>
         </div>
     </div>
 }
+@if (Delete)
+{
+<div>
+    <div hidden class="col-md-12 form-group">
+        <label> @studentid</label>
+    </div>
+    <div class="col-md-12 form-group">
+        <label> @firstname</label>
+    </div>
+    <div class="col-md-12 form-group">
+        <label> @lastname</label>
+    </div>
+    <div class="col-md-12 form-group">
+        <label> @school</label>
+    </div>
+    <div class="col-md-12 form-group">
+        <label class="alert alert-info">Voulez-vous vraiment supprimer cet etudiant ?</label>
+    </div>
+    <button class="btn btn-danger" @onclick="(()=>Deletion2(studentid))">Supprimer</button>
+    <button class="btn btn-primary" @onclick="Annuler">Annuler</button>
+</div>
+
+}
+
 @code
 {
     public List<Models.Student> _students;
@@ -129,8 +150,16 @@
         Create = false;
         Edit = false;
         studentid = id;
+    }
+    public async Task Deletion2(string id)
+    {
         var stud = await Service.DeleteAsync(id);
-        Load();
+        await Load();
+        Delete = false;
+    }
+    public void Annuler()
+    {
+        Delete = false;
     }
 
 
@@ -141,6 +170,7 @@
         Detail = false;
         Delete = false;
     }
+
     public async Task Edition(string id)
     {
         Create = false;
@@ -149,19 +179,23 @@
         studentid = id;
         Delete = false;
 
-        var stud = Service.GetStudentByIdAsync(id);
-        firstname = stud.Result.Firstname;
-        lastname = stud.Result.Lastname;
-        school = stud.Result.School;
+        var stud = await Service.GetStudentByIdAsync(id);
+        if (stud != null)
+        {
+            firstname = stud.Firstname;
+            lastname = stud.Lastname;
+            school = stud.School;
+        }
+
     }
     public async Task Add()
     {
         await Service.InsertStudentAsync(_student);
         Create = false;
-        Load();
+        await Load();
     }
 
-    public async Task Assi()
+    public void Assi()
     {
 
         _student.StudentId = Guid.NewGuid().ToString();
@@ -177,7 +211,7 @@
             School = school
         };
         await Service.UpdateStudentAsync(studentid, student);
-        Load();
+        await Load();
     }
 
     protected override async Task OnInitializedAsync()
